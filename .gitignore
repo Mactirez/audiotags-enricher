@@ -1,0 +1,129 @@
+# ===================================
+# Python
+# ===================================
+
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Python package builds
+build/
+dist/
+*.egg-info/
+.eggs/
+*.egg
+MANIFEST
+
+# ===================================
+# Virtual environments
+# ===================================
+
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# ===================================
+# IDE / Editors
+# ===================================
+
+.idea
+.idea/
+.vscode/
+
+*.swp
+*.swo
+*~
+
+# ===================================
+# Operating systems
+# ===================================
+
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ===================================
+# Environment variables and secrets
+# ===================================
+
+.env
+.env.local
+.env.*.local
+
+# Шаблон переменных окружения хранится в Git
+!.env.example
+
+# ===================================
+# Audio files
+# ===================================
+
+*.mp3
+*.flac
+*.wav
+*.m4a
+*.ogg
+*.opus
+*.aac
+*.wma
+
+# ===================================
+# Generated project data
+# ===================================
+
+# Результаты локального выполнения
+storage/
+storage/*.json
+storage/*.csv
+
+# Внутренние данные MinIO
+storage/MinIO/
+storage/minio/
+
+output/
+results/
+cache/
+temp/
+tmp/
+
+# ===================================
+# Logs
+# ===================================
+
+*.log
+logs/
+
+# ===================================
+# Testing / Quality tools
+# ===================================
+
+.coverage
+coverage.xml
+htmlcov/
+
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.tox/
+.nox/
+
+# ===================================
+# Documentation builds
+# ===================================
+
+_site/
+docs/_build/
+
+# ===================================
+# Package managers
+# ===================================
+
+# PDM local configuration
+.pdm.toml
+__pypackages__/
+
+# uv local cache
+.uv/
