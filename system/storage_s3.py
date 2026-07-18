@@ -1,7 +1,4 @@
 import os
-import json
-from sys import prefix
-
 import boto3
 
 
@@ -37,7 +34,7 @@ def upload_file(client: S3Client, filepath: Path, bucket: str, object_key: str) 
     if not filepath.is_file():
         raise FileNotFoundError(f"Не найден локальный файл для загрузки: {filepath}")
 
-    created_at = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    created_at = datetime.now().strftime("%Y-%m-%d_%H-%M")
     prefix_object_key = f"raw/local/{created_at}_{object_key}"
 
     client.upload_file(
@@ -45,3 +42,8 @@ def upload_file(client: S3Client, filepath: Path, bucket: str, object_key: str) 
         Bucket=bucket,
         Key=prefix_object_key
     )
+
+def download_file(client: S3Client, bucket: str, object_key) -> dict:
+    """Функция для скачивания одного файла из S3-совместимого хранилища."""
+
+    pass
