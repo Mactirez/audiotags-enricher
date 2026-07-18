@@ -7,7 +7,6 @@ from datetime import datetime, timezone
 from typing import Any
 
 from mutagen import File as MutagenFile
-from mutagen.easyid3 import key
 from mutagen.mp3 import MP3 as MutagenMP3
 from mutagen.flac import FLAC as MutagenFLAC
 from mutagen.id3 import USLT, SYLT
@@ -155,19 +154,25 @@ def get_audio_tag_basic(file_paths: list[Path]) -> dict:
 
     return row_audio_metadata
 
+def save_file(path, audio_metadata):
+    with open(path, "w", encoding="utf-8") as file:
+        json.dump(audio_metadata, file, ensure_ascii=False, indent=2)
+
 
 def main():
     """Временная функция для управления сбором данных."""
-    setup_logging(logfile_name="audio_tags_local")
+
+    setup_logging(logfile_name="audio_tags_local.log")
+
+    MUSIC_EDITOR_DIRECTORY = get_env_paths("MUSIC_EDITOR_DIRECTORY")
+    METADATA_LOCAL_RAW_PATH = get_env_paths("METADATA_LOCAL_RAW_PATH")
 
     logger.info("Старт сбора локальных метаданных.")
-    audio_paths = get_audio_paths(get_env_paths('MUSIC_EDITOR_DIRECTORY'))
+    audio_paths = get_audio_paths(MUSIC_EDITOR_DIRECTORY)
     logger.info("Всего обнаружено файлов: %s", len(audio_paths))
-    track = get_audio_tag_basic(audio_paths)
+    tracks = get_audio_tag_basic(audio_paths)
+    save_file(METADATA_LOCAL_RAW_PATH, tracks)
     logger.info("Конец сбора локальных метаданных.")
-
-    print(track)
-
 
 if __name__ == "__main__":
     main()
