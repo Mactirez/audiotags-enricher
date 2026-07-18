@@ -22,7 +22,7 @@ def setup_logging(logfile_name: str) -> None:
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
-        datefmt='datefmt="%Y-%m-%d %H:%M:%S"',
-        handlers=[logging.FileHandler(logfile_path, encoding="utf-8"), logging.StreamHandler(sys.stdout)],
+        datefmt="%Y-%m-%d %H:%M:%S",
+        handlers=[logging.FileHandler(logfile_path, encoding="utf-8"), logging.StreamHandler()],
         force=True
     )
