@@ -4,6 +4,7 @@ import logging
 
 from pathlib import Path
 from datetime import datetime, timezone
+from typing import Any
 
 from mutagen import File as MutagenFile
 from mutagen.easyid3 import key
@@ -19,6 +20,21 @@ logger = logging.getLogger('audio_tags_local.py')
 AUDIO_EXTENSIONS = {".mp3", ".flac"}
 
 load_dotenv()
+
+def get_env_paths(path: str):
+    validate_path = os.getenv(path)
+
+    if validate_path is None:
+        logger.critical("Не найдена переменная окружения: %s", validate_path)
+        raise ValueError(f"Не найдена переменная окружения: {validate_path}")
+
+    return Path(validate_path)
+
+def get_audio_paths(music_directory: Path) -> list[Path]:
+    """Функция находит аудиофайлы внутри каталога и возвращает генератор с путями."""
+
+    paths = [path for path in music_directory.rglob("*") if path.is_file() and path.suffix.lower() in AUDIO_EXTENSIONS]
+    return sorted(paths)
 
 
 def get_audio_track_and_disc_number(audio) -> tuple[Any | None, Any | None, Any | None, Any | None]:
@@ -143,13 +159,11 @@ def get_audio_tag_basic(file_paths: list[Path]) -> dict:
 def main():
     """Временная функция для управления сбором данных."""
     setup_logging(logfile_name="audio_tags_local")
-    audio_path = [Path(os.getenv("audiopath"))]
 
     logger.info("Старт сбора локальных метаданных.")
-    logger.info("Всего обнаружено файлов: %s", len(audio_path))
-
-    track = get_audio_tag_basic(audio_path)
-
+    audio_paths = get_audio_paths(get_env_paths('MUSIC_EDITOR_DIRECTORY'))
+    logger.info("Всего обнаружено файлов: %s", len(audio_paths))
+    track = get_audio_tag_basic(audio_paths)
     logger.info("Конец сбора локальных метаданных.")
 
     print(track)
