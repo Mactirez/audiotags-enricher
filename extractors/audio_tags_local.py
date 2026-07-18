@@ -13,6 +13,7 @@ from mutagen.id3 import USLT, SYLT
 from dotenv import load_dotenv
 
 from system.logging import setup_logging
+from system.storage_s3 import create_s3_client, upload_file, get_required_env
 
 logger = logging.getLogger('audio_tags_local.py')
 
@@ -166,13 +167,19 @@ def main():
 
     MUSIC_EDITOR_DIRECTORY = get_env_paths("MUSIC_EDITOR_DIRECTORY")
     METADATA_LOCAL_RAW_PATH = get_env_paths("METADATA_LOCAL_RAW_PATH")
+    LOCAL_METADATA_OBJECT_KEY = get_required_env("LOCAL_METADATA_OBJECT_KEY")
 
     logger.info("Старт сбора локальных метаданных.")
     audio_paths = get_audio_paths(MUSIC_EDITOR_DIRECTORY)
-    logger.info("Всего обнаружено файлов: %s", len(audio_paths))
+    logger.info("Всего обнаружено файлов:  %s", len(audio_paths))
     tracks = get_audio_tag_basic(audio_paths)
     save_file(METADATA_LOCAL_RAW_PATH, tracks)
     logger.info("Конец сбора локальных метаданных.")
+
+    bucket = get_required_env("S3_BUCKET")
+    client_s3 = create_s3_client()
+    upload_file(client_s3, METADATA_LOCAL_RAW_PATH, bucket, LOCAL_METADATA_OBJECT_KEY)
+    logger.info("Файл загружен в объектное хранилище.")
 
 if __name__ == "__main__":
     main()
